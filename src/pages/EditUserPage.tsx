@@ -110,6 +110,7 @@ export default function EditUsersPage() {
               value={department}
               onChange={setDepartment}
               disabled={false}
+              allowInput={false}
             />
           </Field>
           <Field label="Country">
@@ -118,6 +119,7 @@ export default function EditUsersPage() {
               value={country}
               onChange={setCountry}
               disabled={false}
+              allowInput={false}
             />
           </Field>
           <Field label="Status">
@@ -126,6 +128,7 @@ export default function EditUsersPage() {
               value={status}
               onChange={setStatus}
               disabled={false}
+              allowInput={false}
             />
           </Field>
         </div>

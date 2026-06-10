@@ -51,12 +51,15 @@ export default function FilterHeading({
           placeholder="Select country"
           onChange={onCountryChange}
           disabled={!canUseOtherFilters}
+          allowInput={false}
         />
         <Dropdown
-          options={["All Statuses", ...statuses]}
+          options={statuses}
           value={selectedStatus}
+          placeholder="All Statuses"
           onChange={onStatusChange}
           disabled={!canUseOtherFilters}
+          allowInput={false}
         />
 
         <button

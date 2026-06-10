@@ -10,7 +10,7 @@ export default function UsersPage() {
 
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const departments = [...new Set(users.map((u) => u.department.name))];
   const countries = [...new Set(users.map((u) => u.country.name))];
@@ -25,15 +25,17 @@ export default function UsersPage() {
       !selectedCountry || user.country.name === selectedCountry;
 
     const matchesStatus =
-      selectedStatus === "All Statuses" || user.status.name === selectedStatus;
+      !selectedStatus || user.status.name === selectedStatus;
 
     return matchesDepartment && matchesCountry && matchesStatus;
   });
 
   const clearFilters = () => {
-    setSelectedDepartments([]);
-    setSelectedCountry("");
-    setSelectedStatus("All Statuses");
+    if (selectedCountry || selectedDepartments || selectedStatus) {
+      setSelectedDepartments([]);
+      setSelectedCountry("");
+      setSelectedStatus("");
+    }
   };
 
   return (
