@@ -84,3 +84,7 @@ export const USERS = [
     country: { name: "Canada", value: "CA" },
   },
 ];
+
+export const DEPARTMENTS = [...new Set(USERS.map((u) => u.department.name))];
+export const COUNTRIES = [...new Set(USERS.map((u) => u.country.name))];
+export const STATUSES = [...new Set(USERS.map((u) => u.status.name))];
