@@ -1,20 +1,27 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
+type MultiSelectDropdownProps = {
+  options: string[];
+  label: string;
+  value: string[];
+  onChange: (value: string[]) => void;
+};
+
 export default function MultiSelectDropdown({
   options,
   label,
-}: {
-  options: string[];
-  label: string;
-}) {
+  value,
+  onChange,
+}: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string[]>([options[0]]);
 
   const toggle = (opt: string) => {
-    setSelected((prev) =>
-      prev.includes(opt) ? prev.filter((o) => o !== opt) : [...prev, opt],
-    );
+    const updated = value.includes(opt)
+      ? value.filter((o) => o !== opt)
+      : [...value, opt];
+
+    onChange(updated);
   };
 
   return (
@@ -23,11 +30,10 @@ export default function MultiSelectDropdown({
         onClick={() => setOpen((o) => !o)}
         className="flex items-center justify-between gap-4 border border-gray-300 px-4 py-3 text-sm min-w-40 bg-white"
       >
-        <span>
-          {selected.length > 0 ? `Selected (${selected.length})` : label}
-        </span>
+        <span>{value.length > 0 ? `Selected (${value.length})` : label}</span>
         {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
+
       {open && (
         <div className="absolute top-full left-0 z-10 w-full border border-gray-300 border-t-0 bg-white shadow-sm">
           {options.map((opt) => (
@@ -38,12 +44,12 @@ export default function MultiSelectDropdown({
             >
               <div
                 className={`w-4 h-4 border flex items-center justify-center ${
-                  selected.includes(opt)
+                  value.includes(opt)
                     ? "bg-black border-black"
                     : "border-gray-400"
                 }`}
               >
-                {selected.includes(opt) && (
+                {value.includes(opt) && (
                   <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
                     <path
                       d="M1 4L3.5 6.5L9 1"
@@ -55,6 +61,7 @@ export default function MultiSelectDropdown({
                   </svg>
                 )}
               </div>
+
               {opt}
             </div>
           ))}

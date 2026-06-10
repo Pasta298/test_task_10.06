@@ -109,6 +109,7 @@ export default function EditUsersPage() {
               options={departments}
               value={department}
               onChange={setDepartment}
+              disabled={false}
             />
           </Field>
           <Field label="Country">
@@ -116,10 +117,16 @@ export default function EditUsersPage() {
               options={countries}
               value={country}
               onChange={setCountry}
+              disabled={false}
             />
           </Field>
           <Field label="Status">
-            <Dropdown options={statuses} value={status} onChange={setStatus} />
+            <Dropdown
+              options={statuses}
+              value={status}
+              onChange={setStatus}
+              disabled={false}
+            />
           </Field>
         </div>
 

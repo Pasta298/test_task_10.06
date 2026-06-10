@@ -63,6 +63,7 @@ export default function UserModal({ onClose }: UserModalProps) {
               value={department}
               placeholder="Select department"
               onChange={setDepartment}
+              disabled={false}
             />
           </Field>
           <Field label="Country">
@@ -71,6 +72,7 @@ export default function UserModal({ onClose }: UserModalProps) {
               value={country}
               placeholder="Select country"
               onChange={setCountry}
+              disabled={false}
             />
           </Field>
           <Field label="Status">
@@ -79,6 +81,7 @@ export default function UserModal({ onClose }: UserModalProps) {
               value={status}
               placeholder="Select status"
               onChange={setStatus}
+              disabled={false}
             />
           </Field>
         </div>

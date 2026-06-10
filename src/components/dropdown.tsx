@@ -6,11 +6,13 @@ export default function Dropdown({
   value,
   placeholder,
   onChange,
+  disabled,
 }: {
   options: string[];
   value: string;
   placeholder?: string;
   onChange?: (v: string) => void;
+  disabled: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [internal, setInternal] = useState(value);
@@ -20,7 +22,7 @@ export default function Dropdown({
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => !disabled && setOpen((o) => !o)}
         className="w-full flex items-center justify-between gap-4 border border-gray-300 px-4 py-3 text-sm bg-white"
       >
         <span
@@ -30,7 +32,7 @@ export default function Dropdown({
         </span>
         {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
-      {open && (
+      {open && !disabled && (
         <div className="absolute top-full left-0 z-10 w-full border border-gray-300 border-t-0 bg-white shadow-sm">
           {options.map((opt) => (
             <div

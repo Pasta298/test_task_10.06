@@ -6,12 +6,31 @@ export default function FilterHeading({
   departments,
   countries,
   statuses,
+  selectedDepartments,
+  selectedCountry,
+  selectedStatus,
+  onDepartmentsChange,
+  onCountryChange,
+  onStatusChange,
+  onClearFilters,
   onAddUser,
+  canUseOtherFilters,
 }: {
   departments: string[];
   countries: string[];
   statuses: string[];
+
+  selectedDepartments: string[];
+  selectedCountry: string;
+  selectedStatus: string;
+
+  onDepartmentsChange: (value: string[]) => void;
+  onCountryChange: (value: string) => void;
+  onStatusChange: (value: string) => void;
+  onClearFilters: () => void;
+
   onAddUser: () => void;
+  canUseOtherFilters: boolean;
 }) {
   return (
     <>
@@ -20,11 +39,30 @@ export default function FilterHeading({
       </p>
 
       <div className="flex items-center gap-3 mb-6">
-        <MultiSelectDropdown options={departments} label="Department" />
-        <Dropdown options={countries} value="" placeholder="Select country" />
-        <Dropdown options={statuses} value="All Statuses" />
+        <MultiSelectDropdown
+          options={departments}
+          label="Department"
+          value={selectedDepartments}
+          onChange={onDepartmentsChange}
+        />
+        <Dropdown
+          options={countries}
+          value={selectedCountry}
+          placeholder="Select country"
+          onChange={onCountryChange}
+          disabled={!canUseOtherFilters}
+        />
+        <Dropdown
+          options={["All Statuses", ...statuses]}
+          value={selectedStatus}
+          onChange={onStatusChange}
+          disabled={!canUseOtherFilters}
+        />
 
-        <button className="border border-gray-300 p-2 hover:bg-gray-100 cursor-pointer">
+        <button
+          className="border border-gray-300 p-2 hover:bg-gray-100 cursor-pointer"
+          onClick={onClearFilters}
+        >
           <Trash2 size={16} />
         </button>
 

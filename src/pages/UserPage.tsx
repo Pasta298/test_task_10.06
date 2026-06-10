@@ -8,9 +8,33 @@ export default function UsersPage() {
   const { users, deleteUser } = useUsers();
   const [showModal, setShowModal] = useState(false);
 
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+
   const departments = [...new Set(users.map((u) => u.department.name))];
   const countries = [...new Set(users.map((u) => u.country.name))];
   const statuses = [...new Set(users.map((u) => u.status.name))];
+
+  const filteredUsers = users.filter((user) => {
+    const matchesDepartment =
+      selectedDepartments.length === 0 ||
+      selectedDepartments.includes(user.department.name);
+
+    const matchesCountry =
+      !selectedCountry || user.country.name === selectedCountry;
+
+    const matchesStatus =
+      selectedStatus === "All Statuses" || user.status.name === selectedStatus;
+
+    return matchesDepartment && matchesCountry && matchesStatus;
+  });
+
+  const clearFilters = () => {
+    setSelectedDepartments([]);
+    setSelectedCountry("");
+    setSelectedStatus("All Statuses");
+  };
 
   return (
     <div className="bg-gray-100 min-h-full p-16">
@@ -23,11 +47,18 @@ export default function UsersPage() {
           departments={departments}
           countries={countries}
           statuses={statuses}
+          selectedDepartments={selectedDepartments}
+          selectedCountry={selectedCountry}
+          selectedStatus={selectedStatus}
+          onDepartmentsChange={setSelectedDepartments}
+          onCountryChange={setSelectedCountry}
+          onStatusChange={setSelectedStatus}
+          onClearFilters={clearFilters}
           onAddUser={() => setShowModal(true)}
+          canUseOtherFilters={selectedDepartments.length >= 3}
         />
 
         {showModal && <UserModal onClose={() => setShowModal(false)} />}
-
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-300">
@@ -47,7 +78,7 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr
                 key={user.id}
                 className="border-b border-gray-100 last:border-0"
