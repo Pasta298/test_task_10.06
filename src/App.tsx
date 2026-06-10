@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/header";
 import UsersPage from "./pages/UserPage";
+import EditUsersPage from "./pages/EditUserPage";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <main className="flex-1 overflow-auto h-full">
         <Routes>
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/edit-users" element={<EditUsersPage />} />
         </Routes>
       </main>
     </div>
