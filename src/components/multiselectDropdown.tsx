@@ -24,6 +24,11 @@ export default function MultiSelectDropdown({
     onChange(updated);
   };
 
+  const sortedOptions = [
+    ...options.filter((opt) => value.includes(opt)),
+    ...options.filter((opt) => !value.includes(opt)),
+  ];
+
   return (
     <div className="relative">
       <button
@@ -36,7 +41,7 @@ export default function MultiSelectDropdown({
 
       {open && (
         <div className="absolute top-full left-0 z-10 w-full border border-gray-300 border-t-0 bg-white shadow-sm">
-          {options.map((opt) => (
+          {sortedOptions.map((opt) => (
             <div
               key={opt}
               onClick={() => toggle(opt)}

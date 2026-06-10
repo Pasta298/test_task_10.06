@@ -134,12 +134,15 @@ export default function EditUsersPage() {
         </div>
 
         <div className="flex justify-end gap-3 mt-auto">
-          <button
-            onClick={handleUndo}
-            className="border border-gray-300 px-8 py-3 text-sm hover:bg-gray-100 cursor-pointer"
-          >
-            Undo
-          </button>
+          {isDirty && (
+            <button
+              onClick={handleUndo}
+              className="border border-gray-300 px-8 py-3 text-sm hover:bg-gray-100 cursor-pointer"
+            >
+              Undo
+            </button>
+          )}
+
           <button
             onClick={handleSave}
             disabled={!isDirty}

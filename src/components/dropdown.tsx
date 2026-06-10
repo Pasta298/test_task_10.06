@@ -21,9 +21,11 @@ export default function Dropdown({
 
   const selected = onChange ? value : internal;
 
-  const filteredOptions = options.filter((opt) =>
-    opt.toLowerCase().includes(selected.toLowerCase()),
-  );
+  const filteredOptions = !allowInput
+    ? options
+    : options.filter((opt) =>
+        opt.toLowerCase().includes(selected.toLowerCase()),
+      );
 
   return (
     <div className="relative">
