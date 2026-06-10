@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { DEPARTMENTS, COUNTRIES, STATUSES } from "../data/data";
 import Field from "../components/field";
 import Dropdown from "../components/dropdown";
 import TextInput from "../components/textInput";
+import { useUsers } from "../hooks/useUsers";
 
 interface UserModalProps {
   onClose: () => void;
-  onAdd: (user: {
-    name: string;
-    department: string;
-    country: string;
-    status: string;
-  }) => void;
 }
 
-export default function UserModal({ onClose, onAdd }: UserModalProps) {
+export default function UserModal({ onClose }: UserModalProps) {
+  const { users, addUser } = useUsers();
+
+  const departments = [...new Set(users.map((u) => u.department.name))];
+  const countries = [...new Set(users.map((u) => u.country.name))];
+  const statuses = [...new Set(users.map((u) => u.status.name))];
+
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
   const [country, setCountry] = useState("");
@@ -24,7 +24,15 @@ export default function UserModal({ onClose, onAdd }: UserModalProps) {
 
   const handleAdd = () => {
     if (!isValid) return;
-    onAdd({ name, department, country, status });
+    addUser({
+      name,
+      department: {
+        name: department,
+        value: department.slice(0, 3).toUpperCase(),
+      },
+      country: { name: country, value: country.slice(0, 2).toUpperCase() },
+      status: { name: status, value: status.toUpperCase() },
+    });
     onClose();
   };
 
@@ -51,7 +59,7 @@ export default function UserModal({ onClose, onAdd }: UserModalProps) {
           </Field>
           <Field label="Department">
             <Dropdown
-              options={DEPARTMENTS}
+              options={departments}
               value={department}
               placeholder="Select department"
               onChange={setDepartment}
@@ -59,7 +67,7 @@ export default function UserModal({ onClose, onAdd }: UserModalProps) {
           </Field>
           <Field label="Country">
             <Dropdown
-              options={COUNTRIES}
+              options={countries}
               value={country}
               placeholder="Select country"
               onChange={setCountry}
@@ -67,7 +75,7 @@ export default function UserModal({ onClose, onAdd }: UserModalProps) {
           </Field>
           <Field label="Status">
             <Dropdown
-              options={STATUSES}
+              options={statuses}
               value={status}
               placeholder="Select status"
               onChange={setStatus}

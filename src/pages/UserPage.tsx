@@ -1,11 +1,16 @@
 import { Trash2 } from "lucide-react";
-import { USERS, DEPARTMENTS, COUNTRIES, STATUSES } from "../data/data";
 import FilterHeading from "../components/filterHeading";
 import { useState } from "react";
 import UserModal from "../components/userModal";
+import { useUsers } from "../hooks/useUsers";
 
 export default function UsersPage() {
+  const { users, deleteUser } = useUsers();
   const [showModal, setShowModal] = useState(false);
+
+  const departments = [...new Set(users.map((u) => u.department.name))];
+  const countries = [...new Set(users.map((u) => u.country.name))];
+  const statuses = [...new Set(users.map((u) => u.status.name))];
 
   return (
     <div className="bg-gray-100 min-h-full p-16">
@@ -15,18 +20,13 @@ export default function UsersPage() {
         </h1>
 
         <FilterHeading
-          departments={DEPARTMENTS}
-          countries={COUNTRIES}
-          statuses={STATUSES}
+          departments={departments}
+          countries={countries}
+          statuses={statuses}
           onAddUser={() => setShowModal(true)}
         />
 
-        {showModal && (
-          <UserModal
-            onClose={() => setShowModal(false)}
-            onAdd={(user) => console.log("New user:", user)}
-          />
-        )}
+        {showModal && <UserModal onClose={() => setShowModal(false)} />}
 
         <table className="w-full text-sm">
           <thead>
@@ -47,7 +47,7 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {USERS.map((user) => (
+            {users.map((user) => (
               <tr
                 key={user.id}
                 className="border-b border-gray-100 last:border-0"
@@ -59,7 +59,10 @@ export default function UsersPage() {
                 <td className="py-5 pr-4 text-gray-500">{user.country.name}</td>
                 <td className="py-5 pr-4 text-gray-500">{user.status.name}</td>
                 <td className="py-5 text-right">
-                  <button className="text-gray-400 hover:text-black cursor-pointer">
+                  <button
+                    className="text-gray-400 hover:text-black cursor-pointer"
+                    onClick={() => deleteUser(user.id)}
+                  >
                     <Trash2 size={16} />
                   </button>
                 </td>

@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { USERS, DEPARTMENTS, COUNTRIES, STATUSES } from "../data/data";
 import Field from "../components/field";
 import TextInput from "../components/textInput";
 import Dropdown from "../components/dropdown";
+import { useUsers } from "../hooks/useUsers";
 
 export default function EditUsersPage() {
-  const [selectedUserId, setSelectedUserId] = useState(USERS[0].id);
+  const { users, updateUser } = useUsers();
+
+  const departments = [...new Set(users.map((u) => u.department.name))];
+  const countries = [...new Set(users.map((u) => u.country.name))];
+  const statuses = [...new Set(users.map((u) => u.status.name))];
+
+  const [selectedUserId, setSelectedUserId] = useState(users[0].id);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const selectedUser = USERS.find((u) => u.id === selectedUserId)!;
+  const selectedUser = users.find((u) => u.id === selectedUserId)!;
 
   const [name, setName] = useState(selectedUser.name);
   const [department, setDepartment] = useState(selectedUser.department.name);
@@ -30,7 +36,7 @@ export default function EditUsersPage() {
     status !== original.status;
 
   const handleUserChange = (id: number) => {
-    const user = USERS.find((u) => u.id === id)!;
+    const user = users.find((u) => u.id === id)!;
     setSelectedUserId(id);
     setName(user.name);
     setDepartment(user.department.name);
@@ -44,6 +50,18 @@ export default function EditUsersPage() {
     setDepartment(original.department);
     setCountry(original.country);
     setStatus(original.status);
+  };
+
+  const handleSave = () => {
+    updateUser(selectedUserId, {
+      name,
+      department: {
+        name: department,
+        value: department.slice(0, 3).toUpperCase(),
+      },
+      country: { name: country, value: country.slice(0, 2).toUpperCase() },
+      status: { name: status, value: status.toUpperCase() },
+    });
   };
 
   return (
@@ -65,7 +83,7 @@ export default function EditUsersPage() {
               </button>
               {userDropdownOpen && (
                 <div className="absolute top-full left-0 z-10 w-full border border-gray-300 border-t-0 bg-white shadow-sm">
-                  {USERS.map((user) => (
+                  {users.map((user) => (
                     <div
                       key={user.id}
                       onClick={() => handleUserChange(user.id)}
@@ -88,20 +106,20 @@ export default function EditUsersPage() {
           </Field>
           <Field label="Department">
             <Dropdown
-              options={DEPARTMENTS}
+              options={departments}
               value={department}
               onChange={setDepartment}
             />
           </Field>
           <Field label="Country">
             <Dropdown
-              options={COUNTRIES}
+              options={countries}
               value={country}
               onChange={setCountry}
             />
           </Field>
           <Field label="Status">
-            <Dropdown options={STATUSES} value={status} onChange={setStatus} />
+            <Dropdown options={statuses} value={status} onChange={setStatus} />
           </Field>
         </div>
 
@@ -113,6 +131,7 @@ export default function EditUsersPage() {
             Undo
           </button>
           <button
+            onClick={handleSave}
             disabled={!isDirty}
             className={`border border-gray-300 px-8 py-3 text-sm ${
               isDirty
