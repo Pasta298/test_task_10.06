@@ -116,8 +116,8 @@ function MultiSelectDropdown({
 
 export default function UsersPage() {
   return (
-    <div className="bg-gray-100 min-h-full">
-      <div className="border border-gray-300 bg-white p-8">
+    <div className="bg-gray-100 min-h-full p-16">
+      <div className="border border-black bg-white p-8">
         <h1 className="text-center text-2xl tracking-[0.2em] font-normal mb-6">
           USERS
         </h1>
